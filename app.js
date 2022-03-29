@@ -2,6 +2,7 @@ const tileDisplay = document.querySelector('.tile-container')
 const keyboard = document.querySelector('.key-container')
 const messageDisplay = document.querySelector('.message-container')
 
+
 let wordle
 
 const getWordle = () => {
@@ -73,28 +74,36 @@ keys.forEach(key => {
     buttonElement.textContent = key
     buttonElement.setAttribute('id', key)
     buttonElement.addEventListener('click', () => handleClick(key))
-
-    // !TODO add in a keyboard event listener. 
-    buttonElement.addEventListener('keypress', () => handlePress(key))
     keyboard.append(buttonElement)
 })
 // what is a <div. , =>, and confusion on anything that she essentially stated was
 //in another video. JSON, stuff like that
+
+
 const handlePress = (event) =>{
-    const keyName = event.key
-    if(!gameOver){
-        if(keyname == 'backspace'){
+    const keyName = event.key.toLowerCase()
+    if(!isGameOver){
+        if(keyName === 'backspace'){
             deleteLetter()
             return
         }
-        if(keyName == 'enter'){
+        if(keyName === 'enter'){
             checkRow()
             return
         }
-        addLetter(keyName)
+        if(keyName <= 'z' && keyName >= 'a' && keyName != 'tab' && keyName != 'shift' && keyName != 'control' && keyName != 'alt'
+        && keyName != 'meta' && keyName != 'browserforward' && keyName != 'browserback' && keyName != 'pageup' && keyName != 'pagedown'){
+            addLetter(keyName.toUpperCase())
+        }
+        
+        console.log(keyName)
+        //do I need a to letter function?? 
 
     }
 }
+document.addEventListener('keydown', handlePress)
+
+
 const handleClick = (letter) => {
     if (!isGameOver) {
         if (letter === '«') {
@@ -106,6 +115,7 @@ const handleClick = (letter) => {
             return
         }
         addLetter(letter)
+        
     }
 }
 
