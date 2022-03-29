@@ -45,12 +45,12 @@ const keys = [
     '«',
 ]
 const guessRows = [
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', ''],
-    ['', '', '', '', '']
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', '']
 ]
 let currentRow = 0
 let currentTile = 0
@@ -73,10 +73,28 @@ keys.forEach(key => {
     buttonElement.textContent = key
     buttonElement.setAttribute('id', key)
     buttonElement.addEventListener('click', () => handleClick(key))
+
+    // !TODO add in a keyboard event listener. 
+    buttonElement.addEventListener('keypress', () => handlePress(key))
     keyboard.append(buttonElement)
 })
 // what is a <div. , =>, and confusion on anything that she essentially stated was
 //in another video. JSON, stuff like that
+const handlePress = (event) =>{
+    const keyName = event.key
+    if(!gameOver){
+        if(keyname == 'backspace'){
+            deleteLetter()
+            return
+        }
+        if(keyName == 'enter'){
+            checkRow()
+            return
+        }
+        addLetter(keyName)
+
+    }
+}
 const handleClick = (letter) => {
     if (!isGameOver) {
         if (letter === '«') {
@@ -92,7 +110,7 @@ const handleClick = (letter) => {
 }
 
 const addLetter = (letter) => {
-    if (currentTile < 5 && currentRow < 6) {
+    if (currentTile < 6 && currentRow < 7) {
         const tile = document.getElementById('guessRow-' + currentRow + '-tile-' + currentTile)
         tile.textContent = letter
         guessRows[currentRow][currentTile] = letter
@@ -129,7 +147,7 @@ const checkRow = () => {
                     } else {
                         if (currentRow >= 5) {
                             isGameOver = true
-                            showMessage('Game Over')
+                            showMessage('Game Over: ' + wordle)
                             return
                         }
                         if (currentRow < 5) {
