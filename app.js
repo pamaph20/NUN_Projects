@@ -1,19 +1,26 @@
+//const { json } = require("express")
+
 const tileDisplay = document.querySelector('.tile-container')
 const keyboard = document.querySelector('.key-container')
 const messageDisplay = document.querySelector('.message-container')
 
 
+ 
 let wordle
 
 const getWordle = () => {
-    fetch('http://localhost:8000/word')
+    fetch('https://myslu.stlawu.edu/~clee/nundle/nundleWord.php')
         .then(response => response.json())
         .then(json => {
-            wordle = json.toUpperCase()
+            wordle = json["data"]["nundle"]
         })
         .catch(err => console.log(err))
 }
+
 getWordle()
+
+console.log(wordle)
+
 
 const keys = [
     'Q',
@@ -46,6 +53,15 @@ const keys = [
     '«',
 ]
 const guessRows = [
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', ''],
+    ['', '', '', '', '']
+]
+
+const guessRows_6 = [
     ['', '', '', '', '', ''],
     ['', '', '', '', '', ''],
     ['', '', '', '', '', ''],
@@ -120,7 +136,7 @@ const handleClick = (letter) => {
 }
 
 const addLetter = (letter) => {
-    if (currentTile < 6 && currentRow < 7) {
+    if (currentTile < 5 && currentRow < 6) {
         const tile = document.getElementById('guessRow-' + currentRow + '-tile-' + currentTile)
         tile.textContent = letter
         guessRows[currentRow][currentTile] = letter
@@ -143,6 +159,7 @@ const checkRow = () => {
     const guess = guessRows[currentRow].join('')
     if (currentTile > 4) {
         fetch(`http://localhost:8000/check/?word=${guess}`)
+        
             .then(response => response.json())
             .then(json => {
                 if (json == 'Entry word not found') {
