@@ -18,6 +18,7 @@ const getNundle = () => {
              // this prints the json object into the console.
             // to access the word in the JSON object, it would be
             wordle = json["data"]["nundle"];
+            console.log(wordle)
             
         })
         .catch(err => console.log(err))
