@@ -23,7 +23,7 @@ const getNundle = () => {
         .catch(err => console.log(err))
         return wordle
 }
-console.log(getNundle())
+console.log(wordle)
 
 
 
