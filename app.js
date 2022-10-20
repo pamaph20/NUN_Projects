@@ -1,25 +1,30 @@
 //const { json } = require("express")
 
+//const { request } = require("express")
+
 const tileDisplay = document.querySelector('.tile-container')
 const keyboard = document.querySelector('.key-container')
 const messageDisplay = document.querySelector('.message-container')
 
 
  
-let wordle
 
-const getWordle = () => {
+
+const getNundle = () => {
+    let wordle
     fetch('https://myslu.stlawu.edu/~clee/nundle/nundleWord.php')
         .then(response => response.json())
         .then(json => {
-            wordle = json["data"]["nundle"]
+             // this prints the json object into the console.
+            // to access the word in the JSON object, it would be
+            wordle = json["data"]["nundle"];
+            
         })
         .catch(err => console.log(err))
+        return wordle
 }
+console.log(getNundle())
 
-getWordle()
-
-console.log(wordle)
 
 
 const keys = [
