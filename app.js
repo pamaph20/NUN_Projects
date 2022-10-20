@@ -24,6 +24,7 @@ const getNundle = () => {
         .catch(err => console.log(err))
         return wordle
 }
+getNundle()
 console.log(wordle)
 
 
