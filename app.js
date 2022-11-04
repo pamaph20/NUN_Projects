@@ -1,31 +1,21 @@
-//const { json } = require("express")
 
-//const { request } = require("express")
 
+//!TODO -- Look Up jquery documentation!!!
 const tileDisplay = document.querySelector('.tile-container')
 const keyboard = document.querySelector('.key-container')
 const messageDisplay = document.querySelector('.message-container')
 
-
- 
-
-
-const getNundle = () => {
-    let wordle
-    fetch('https://myslu.stlawu.edu/~clee/nundle/nundleWord.php')
+const getNundle = async () => {
+    return fetch('https://myslu.stlawu.edu/~clee/nundle/nundleWord.php')
         .then(response => response.json())
         .then(json => {
-             // this prints the json object into the console.
-            // to access the word in the JSON object, it would be
             wordle = json["data"]["nundle"];
             console.log(wordle)
-            
         })
         .catch(err => console.log(err))
-        return wordle
 }
 getNundle()
-console.log(wordle)
+
 
 
 
@@ -99,8 +89,6 @@ keys.forEach(key => {
     buttonElement.addEventListener('click', () => handleClick(key))
     keyboard.append(buttonElement)
 })
-// what is a <div. , =>, and confusion on anything that she essentially stated was
-//in another video. JSON, stuff like that
 
 
 const handlePress = (event) =>{
@@ -117,10 +105,11 @@ const handlePress = (event) =>{
         if(keyName <= 'z' && keyName >= 'a' && keyName != 'tab' && keyName != 'shift' && keyName != 'control' && keyName != 'alt'
         && keyName != 'meta' && keyName != 'browserforward' && keyName != 'browserback' && keyName != 'pageup' && keyName != 'pagedown'){
             addLetter(keyName.toUpperCase())
+            //!TODO Make sure that youre only able to add alpha characters and backspace and shit
         }
         
         console.log(keyName)
-        //do I need a to letter function?? 
+
 
     }
 }
@@ -163,25 +152,26 @@ const deleteLetter = () => {
 }
 
 const checkRow = () => {
-    const guess = guessRows[currentRow].join('')
+    const guess = guessRows[currentRow].join('').toLowerCase()
     if (currentTile > 4) {
-        fetch(`http://localhost:8000/check/?word=${guess}`)
+        fetch(`https://myslu.stlawu.edu/~clee/nundle/isValid.php?guess=${guess}`)
         
             .then(response => response.json())
-            .then(json => {
-                if (json == 'Entry word not found') {
+            .then(response => {
+                console.log(response)
+                if (!response.data.isValid) {
                     showMessage('word not in list')
                     return
                 } else {
                     flipTile()
-                    if (wordle == guess) {
+                    if (guess == this.wordle) {
                         showMessage('Magnificent!')
                         isGameOver = true
                         return
                     } else {
                         if (currentRow >= 5) {
                             isGameOver = true
-                            showMessage('Game Over: ' + wordle)
+                            showMessage('Game Over: ' + this.wordle)
                             return
                         }
                         if (currentRow < 5) {
@@ -208,7 +198,7 @@ const addColorToKey = (keyLetter, color) => {
 
 const flipTile = () => {
     const rowTiles = document.querySelector('#guessRow-' + currentRow).childNodes
-    let checkWordle = wordle
+    let checkWordle = this.wordle.toUpperCase()
     const guess = []
 
     rowTiles.forEach(tile => {
@@ -216,7 +206,7 @@ const flipTile = () => {
     })
 
     guess.forEach((guess, index) => {
-        if (guess.letter == wordle[index]) {
+        if (guess.letter == this.wordle[index]) {
             guess.color = 'green-overlay'
             checkWordle = checkWordle.replace(guess.letter, '')
         }
